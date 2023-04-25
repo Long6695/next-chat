@@ -1,21 +1,41 @@
-import React from "react";
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  BellIcon,
-} from "@heroicons/react/24/outline";
-import Card from "../card";
+"use client";
+import React, { useState } from "react";
+import Rooms from "../rooms";
 import SearchBar from "../search";
 import Navbar from "../nav-bar";
+import Chat from "../chat";
+import { RoomType, RoomsType } from "@/types/chat";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../loading";
 
-const Drawer = ({ children }: { children: React.ReactNode }) => {
+async function getRooms() {
+  const res = await fetch("http://localhost:8080/rooms");
+  const rooms = (await res.json()) as RoomsType[];
+  return rooms;
+}
+
+const Drawer = () => {
+  const [selectedRoom, setSelectedRoom] = useState<RoomsType>();
+  const {
+    data: roomsData,
+    isLoading: isRoomLoading,
+    isFetching: isRoomFetching,
+  } = useQuery({
+    queryKey: ["hydrate-rooms"],
+    queryFn: () => getRooms(),
+  });
+
+  const handleSelectedRoom = (room: RoomsType) => {
+    setSelectedRoom(room);
+  };
+
   return (
     <div className="drawer drawer-mobile bg-base-300">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
         <Navbar />
         <div className="p-4 h-full">
-        {children}
+          {selectedRoom && <Chat room={selectedRoom} />}
         </div>
       </div>
       <div className="drawer-side">
@@ -25,7 +45,11 @@ const Drawer = ({ children }: { children: React.ReactNode }) => {
             <SearchBar />
           </li>
           <li>
-            <Card />
+            {isRoomLoading || isRoomFetching ? (
+              <Loading />
+            ) : roomsData ? (
+              <Rooms rooms={roomsData} onSelected={handleSelectedRoom} />
+            ) : null}
           </li>
         </ul>
       </div>

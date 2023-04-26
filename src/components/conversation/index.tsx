@@ -1,7 +1,7 @@
 import React from "react";
 import Message from "./Message";
 import Input from "./Input";
-import { MessageType, RoomsType } from "@/types/chat";
+import { MessageType, RoomsType, UserType } from "@/types/chat";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../loading";
 
@@ -13,7 +13,7 @@ const fetchMessage = async (room_id: string) => {
   return rooms;
 };
 
-const Chat = ({ room }: { room: RoomsType }) => {
+const Conversation = ({ room, auth }: { room: RoomsType, auth: UserType }) => {
   const {
     data: message,
     isLoading: isMessageLoading,
@@ -31,7 +31,7 @@ const Chat = ({ room }: { room: RoomsType }) => {
         message?.map((item: MessageType) => (
           <Message
             key={item?.id}
-            direction={item?.user_id === '1bc833808-05ed-455a-9d26-64fe1d96d62d' ? "chat-end" : "chat-start"}
+            direction={item?.user_id === auth?.id ? "chat-end" : "chat-start"}
             name={room?.users?.find(val => val?.id === item?.user_id)?.username || ""}
             status="Delivered"
             message={item?.content}
@@ -44,4 +44,4 @@ const Chat = ({ room }: { room: RoomsType }) => {
   );
 };
 
-export default Chat;
+export default Conversation;

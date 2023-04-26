@@ -1,4 +1,4 @@
-import Providers from "@/utils/Provider";
+import Providers from "@/utils/provider";
 import "./globals.css";
 import { Roboto } from "next/font/google";
 

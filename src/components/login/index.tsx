@@ -1,6 +1,6 @@
 "use client";
 import { UserType } from "@/types/chat";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 
 type UserParam = {
@@ -38,10 +38,25 @@ const Login = ({
   setAuth: React.Dispatch<React.SetStateAction<UserType | null>>;
 }) => {
   const { mutate, data, isLoading } = useMutation(signIn);
+  const [form, setForm] = useState<{ phone: string }>({
+    phone: "",
+  });
+  const handleLogin = () => {
+    mutate(form);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
 
+    setForm((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
   useEffect(() => {
-    setAuth(data)
-  }, [data, isLoading, setAuth])
+    setAuth(data);
+  }, [data, isLoading, setAuth]);
 
   return (
     <div className="hero min-h-screen bg-base-200">
@@ -61,9 +76,12 @@ const Login = ({
                 <span className="label-text">phone</span>
               </label>
               <input
+                name="phone"
                 type="text"
                 placeholder="phone"
                 className="input input-bordered"
+                value={form.phone}
+                onChange={handleChange}
               />
               <label className="label">
                 <a
@@ -76,10 +94,7 @@ const Login = ({
               </label>
             </div>
             <div className="form-control mt-6">
-              <button
-                className="btn btn-primary"
-                onClick={() => mutate({ phone: "123123" })}
-              >
+              <button className="btn btn-primary" disabled={!form.phone} onClick={handleLogin}>
                 Login
               </button>
             </div>
@@ -102,6 +117,23 @@ const CreateUser = ({
     unknown,
     UserParam
   >(createAccount);
+  const [form, setForm] = useState<{ phone: string; username: string }>({
+    phone: "",
+    username: "",
+  });
+  const handleCreateUser = () => {
+    mutate(form);
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+
+    setForm((prev) => {
+      return {
+        ...prev,
+        [name]: value,
+      };
+    });
+  };
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -120,9 +152,12 @@ const CreateUser = ({
                 <span className="label-text">username</span>
               </label>
               <input
+                name="username"
                 type="text"
                 placeholder="username"
                 className="input input-bordered"
+                value={form.username}
+                onChange={handleChange}
               />
             </div>
             <div className="form-control">
@@ -130,9 +165,12 @@ const CreateUser = ({
                 <span className="label-text">phone</span>
               </label>
               <input
+                name="phone"
                 type="text"
                 placeholder="phone"
                 className="input input-bordered"
+                value={form.phone}
+                onChange={handleChange}
               />
               <label className="label">
                 <a
@@ -147,7 +185,8 @@ const CreateUser = ({
             <div className="form-control mt-6">
               <button
                 className="btn btn-primary"
-                onClick={() => mutate({ username: "Long", phone: "12312322" })}
+                onClick={handleCreateUser}
+                disabled={!form.phone || !form.username}
               >
                 Register
               </button>

@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import Rooms from "../rooms";
 import SearchBar from "../search";
 import Navbar from "../nav-bar";
-import Chat from "../chat";
-import { RoomType, RoomsType } from "@/types/chat";
+import Chat from "../conversation";
+import { RoomsType, UserType } from "@/types/chat";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../loading";
 
@@ -14,7 +14,7 @@ async function getRooms() {
   return rooms;
 }
 
-const Drawer = () => {
+const Drawer = ({ auth }: { auth: UserType }) => {
   const [selectedRoom, setSelectedRoom] = useState<RoomsType>();
   const {
     data: roomsData,
@@ -35,7 +35,7 @@ const Drawer = () => {
       <div className="drawer-content flex flex-col">
         <Navbar />
         <div className="p-4 h-full">
-          {selectedRoom && <Chat room={selectedRoom} />}
+          {selectedRoom && <Chat room={selectedRoom} auth={auth} />}
         </div>
       </div>
       <div className="drawer-side">

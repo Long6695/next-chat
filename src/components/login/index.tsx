@@ -1,7 +1,8 @@
-"use client";
-import { UserType } from "@/types/chat";
-import { useMutation } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+'use client';
+import useNotification from '@/hooks/useNotification';
+import { UserType } from '@/types/chat';
+import { useMutation } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
 
 type UserParam = {
   username: string;
@@ -14,10 +15,10 @@ async function createAccount({
   username,
   phone,
 }: UserParam): Promise<CreateUserMutationResult> {
-  const res = await fetch("http://localhost:8080/users/create", {
-    method: "POST",
+  const res = await fetch('http://localhost:8080/users/create', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ username, phone }),
   });
@@ -26,7 +27,7 @@ async function createAccount({
 }
 
 async function signIn({ phone }: { phone: string }) {
-  const res = await fetch("http://localhost:8080/users/phone/" + phone);
+  const res = await fetch('http://localhost:8080/users/phone/' + phone);
   return res.json();
 }
 
@@ -39,7 +40,7 @@ const Login = ({
 }) => {
   const { mutate, data, isLoading } = useMutation(signIn);
   const [form, setForm] = useState<{ phone: string }>({
-    phone: "",
+    phone: '',
   });
   const handleLogin = () => {
     mutate(form);
@@ -94,7 +95,11 @@ const Login = ({
               </label>
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary" disabled={!form.phone} onClick={handleLogin}>
+              <button
+                className="btn btn-primary"
+                disabled={!form.phone}
+                onClick={handleLogin}
+              >
                 Login
               </button>
             </div>
@@ -112,17 +117,31 @@ const CreateUser = ({
   onRegister: (value: boolean) => any;
   setAuth: React.Dispatch<React.SetStateAction<UserType | null>>;
 }) => {
-  const { mutate, data, error, isLoading } = useMutation<
+  const { mutate, data, error, isLoading, isSuccess } = useMutation<
     CreateUserMutationResult,
     unknown,
     UserParam
   >(createAccount);
   const [form, setForm] = useState<{ phone: string; username: string }>({
-    phone: "",
-    username: "",
+    phone: '',
+    username: '',
   });
+  const { notify } = useNotification();
+
   const handleCreateUser = () => {
-    mutate(form);
+    mutate(form, {
+      onSuccess(data, variables, context) {
+        console.log({ data, variables, context });
+      },
+      onError(error: any, variables, context) {
+        notify({
+          message: error?.message,
+          options: {
+            type: 'error',
+          },
+        });
+      },
+    });
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -188,7 +207,7 @@ const CreateUser = ({
                 onClick={handleCreateUser}
                 disabled={!form.phone || !form.username}
               >
-                Register
+                {isLoading ? 'Loading...' : 'Register'}
               </button>
             </div>
           </div>

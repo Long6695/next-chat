@@ -1,8 +1,8 @@
-"use client";
-
-import React from "react";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+'use client';
+import React from 'react';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Toast from './toast';
 
 function Providers({ children }: React.PropsWithChildren) {
   const [client] = React.useState(
@@ -12,6 +12,7 @@ function Providers({ children }: React.PropsWithChildren) {
   return (
     <QueryClientProvider client={client}>
       {children}
+      <Toast />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

@@ -1,5 +1,5 @@
-import Providers from '@/utils/provider';
-import './globals.css';
+import Providers from '@/react-query/providers';
+import './(site)/globals.css';
 import { Roboto } from 'next/font/google';
 
 const roboto = Roboto({

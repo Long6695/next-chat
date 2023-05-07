@@ -1,33 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Rooms from "../rooms";
 import SearchBar from "../search";
 import Navbar from "../nav-bar";
-import Chat from "../conversation";
-import { RoomsType, UserType } from "@/types/chat";
-import { useQuery } from "@tanstack/react-query";
+import Chat from "../chat";
+import { RoomsType } from "@/types/chat";
+import { useCurrentUser } from "@/react-query/hooks/useCurrentUser";
+import { toast } from "react-toastify";
 import Loading from "../loading";
 
-async function getRooms() {
-  const res = await fetch("http://localhost:8080/rooms");
-  const rooms = (await res.json()) as RoomsType[];
-  return rooms;
-}
-
-const Drawer = ({ auth }: { auth: UserType }) => {
+const Drawer = () => {
   const [selectedRoom, setSelectedRoom] = useState<RoomsType>();
-  const {
-    data: roomsData,
-    isLoading: isRoomLoading,
-    isFetching: isRoomFetching,
-  } = useQuery({
-    queryKey: ["hydrate-rooms"],
-    queryFn: () => getRooms(),
-  });
-
+  const { data, isLoading, isFetching } = useCurrentUser();
   const handleSelectedRoom = (room: RoomsType) => {
     setSelectedRoom(room);
   };
+  if (!data || isLoading || isFetching) {
+    return <Loading />;
+  }
 
   return (
     <div className="drawer drawer-mobile bg-base-300">
@@ -35,7 +25,7 @@ const Drawer = ({ auth }: { auth: UserType }) => {
       <div className="drawer-content flex flex-col">
         <Navbar />
         <div className="p-4 h-full">
-          {selectedRoom && <Chat room={selectedRoom} auth={auth} />}
+          {/* {selectedRoom && <Chat room={selectedRoom} auth={auth} />} */}
         </div>
       </div>
       <div className="drawer-side">
@@ -45,11 +35,11 @@ const Drawer = ({ auth }: { auth: UserType }) => {
             <SearchBar />
           </li>
           <li>
-            {isRoomLoading || isRoomFetching ? (
+            {/* {isRoomLoading || isRoomFetching ? (
               <Loading />
             ) : roomsData ? (
               <Rooms rooms={roomsData} onSelected={handleSelectedRoom} />
-            ) : null}
+            ) : null} */}
           </li>
         </ul>
       </div>

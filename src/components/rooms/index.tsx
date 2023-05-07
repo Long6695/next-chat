@@ -16,7 +16,7 @@ const Rooms = ({
 
   return (
     <>
-      {rooms.map((value, idx) => (
+      {rooms?.map((value, idx) => (
         <Room key={idx} data={value} onSelected={handleSelectedRoom} />
       ))}
     </>

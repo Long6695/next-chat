@@ -1,16 +1,11 @@
+import { UserType } from "./user";
+
 export interface RoomType {
     id: string;
     name: string;
     last_message: string;
     participant_ids: string;
     created_at: string;
-}
-
-export interface UserType {
-    id: string;
-    username: string;
-    phone: string;
-    created_at: string
 }
 
 export interface RoomsType {

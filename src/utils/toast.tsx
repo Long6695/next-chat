@@ -1,11 +1,11 @@
-import React from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React from 'react'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const Toast = () => {
   return (
     <ToastContainer
-      position="top-right"
+      position="top-center"
       autoClose={3000}
       hideProgressBar={false}
       newestOnTop={false}
@@ -15,7 +15,7 @@ const Toast = () => {
       draggable
       pauseOnHover
     />
-  );
-};
+  )
+}
 
-export default Toast;
+export default Toast

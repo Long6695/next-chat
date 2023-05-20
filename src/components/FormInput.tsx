@@ -1,12 +1,13 @@
-import React, { InputHTMLAttributes } from 'react'
+import React, { ComponentType, InputHTMLAttributes } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { IconBaseProps, IconType } from 'react-icons'
 
 type FormInputProps = {
   name: string
-  label: string
+  Icon: ComponentType<IconBaseProps>
 } & InputHTMLAttributes<HTMLInputElement>
 
-const InputForm = ({ name, label, ...props }: FormInputProps) => {
+const InputForm = ({ name, Icon, ...props }: FormInputProps) => {
   const {
     control,
     formState: { errors },
@@ -19,14 +20,16 @@ const InputForm = ({ name, label, ...props }: FormInputProps) => {
       name={name}
       render={({ field }) => (
         <div className="form-control mb-3">
-          <label className="label">
-            <span className="label-text text-base">{label}</span>
-          </label>
-          <input
-            className="input input-bordered w-full"
-            {...field}
-            {...props}
-          />
+          <div className="flex items-center">
+            <div>
+              <Icon size={25} className="fill-primary" />
+            </div>
+            <input
+              className="input border-t-0 border-l-0 border-r-0 rounded-none border-b-[1px] border-primary w-full focus:outline-none"
+              {...field}
+              {...props}
+            />
+          </div>
           {errors?.[name]?.message && (
             <label className="label">
               <p className="text-xs text-error">

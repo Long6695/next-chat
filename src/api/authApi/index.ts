@@ -1,5 +1,5 @@
-import { LoginInput } from '@/app/(not-auth)/login/page'
-import { RegisterInput } from '@/app/(not-auth)/register/page'
+import { LoginInput } from '@/app/(not-auth)/login/LoginForm'
+import { RegisterInput } from '@/app/(not-auth)/register/RegisterForm'
 import { GenericResponse, LoginOutputType, LoginResponse } from '@/types/auth'
 import axios from 'axios'
 
@@ -27,18 +27,18 @@ authApi.interceptors.response.use(
     return response
   },
   async (error) => {
-    const originalRequest = error.config
-    const errMessage = error.response.data.message as string
+    const originalRequest = error?.config
+    const errMessage = error?.response?.data?.message as string
     if (
       (error?.response?.status === 401 ||
-        errMessage.includes('not logged in')) &&
+        errMessage?.includes('not logged in')) &&
       !originalRequest._retry
     ) {
       originalRequest._retry = true
       await refreshAccessTokenFn()
       return authApi(originalRequest)
     }
-    if (Array.isArray((error as any).response.data.error)) {
+    if (Array.isArray((error as any).response?.data?.error)) {
       ;(error as any).response.data.error.forEach((el: any) =>
         Promise.reject(el.message),
       )

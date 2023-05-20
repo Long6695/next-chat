@@ -1,13 +1,8 @@
 import PublicRoute from '@/guard/PublicRoute'
-import React, { Suspense } from 'react'
-import AuthLoading from './loading'
+import React from 'react'
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <PublicRoute>
-      <Suspense fallback={<AuthLoading />}>{children}</Suspense>
-    </PublicRoute>
-  )
+  return <>{children}</>
 }
 
 export default AuthLayout

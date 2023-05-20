@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React from 'react'
-import SwitchTheme from '../shares/SwitchTheme'
+import SwitchTheme from '../SwitchTheme'
 import { AUTH_TYPE } from '@/constant/auth'
 import Link from 'next/link'
 
@@ -15,7 +15,6 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
   const router = useRouter()
   const authContext = useAuthContext()
   const user = authContext.state.user
-
   const { mutate: logoutUser } = useMutation(async () => await logoutUserFn(), {
     onSuccess: (data) => {
       authContext.dispatch({ type: AUTH_TYPE.SET_USER, payload: null })
@@ -43,19 +42,15 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
       </div>
       <div className="navbar-end">
         <SwitchTheme />
-        <label
-          className="btn btn-ghost btn-circle"
-          onClick={() => router.push('/chat')}
-        >
-          <AiFillWechat className="fill-primary w-8 h-8" />
+        <label className="btn btn-ghost btn-circle">
+          <Link href="/chat">
+            <AiFillWechat className="fill-primary w-8 h-8" />
+          </Link>
         </label>
         {!user ? (
-          <button
-            className="btn btn-primary"
-            onClick={() => router.push('/login')}
-          >
+          <Link href="/login" className="btn btn-primary">
             Sign in
-          </button>
+          </Link>
         ) : (
           <div className="menu menu-horizontal">
             <div className="dropdown dropdown-end">

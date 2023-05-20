@@ -1,8 +1,6 @@
 import Providers from '@/react-query/providers'
 import './globals.css'
 import { Roboto } from 'next/font/google'
-import { Suspense } from 'react'
-import Loading from '@/components/shares/Loading'
 
 const roboto = Roboto({
   weight: ['400', '500', '700'],
@@ -23,9 +21,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <body className={roboto.className}>
-        <Providers>
-          <Suspense fallback={<Loading />}>{children}</Suspense>
-        </Providers>
+          <Providers>{children} </Providers>
       </body>
     </html>
   )

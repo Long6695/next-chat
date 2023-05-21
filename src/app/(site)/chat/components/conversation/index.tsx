@@ -1,9 +1,5 @@
 import React from 'react'
-import Message from './Message'
 import Input from './Input'
-import { MessageType, RoomsType } from '@/types/chat'
-import Loading from '../../../../../components/shares/Loading'
-import { UserType } from '@/types/user'
 
 const fetchMessage = async (room_id: string) => {
   if (!room_id) return

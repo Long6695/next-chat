@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import Rooms from '../rooms'
+import Navbar from '@/components/navbar'
 import SearchBar from '../search'
-import Navbar from '../../../../../components/nav-bar'
-import { RoomsType } from '@/types/chat'
 
 const Drawer = ({ children }: { children: React.ReactNode }) => {
   // const [selectedRoom, setSelectedRoom] = useState<RoomsType>()

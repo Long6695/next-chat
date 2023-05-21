@@ -1,5 +1,5 @@
-import Loading from '@/components/shares/Loading'
+import Loader from "@/components/Loader";
 
 export default function GlobalLoading() {
-  return <Loading />
+  return <Loader />
 }

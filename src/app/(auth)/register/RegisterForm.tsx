@@ -1,14 +1,13 @@
 'use client'
-import { signUpUserFn } from '@/api/authApi'
 import FormInput from '@/components/FormInput'
+import { useRegisterMutation } from '@/redux/auth/auth.service'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form'
 import { AiOutlineLogout, AiOutlineUser } from 'react-icons/ai'
 import { MdLockOutline, MdOutlineAlternateEmail } from 'react-icons/md'
-import { toast } from 'react-toastify'
 import { object, string, TypeOf } from 'zod'
 
 const registerSchema = object({
@@ -38,21 +37,10 @@ const RegisterForm = () => {
     formState: { isSubmitSuccessful },
   } = methods
   const router = useRouter()
-
-  // ? Calling the Register Mutation
-  const { mutate, isLoading } = useMutation(
-    (userData: RegisterInput) => signUpUserFn(userData),
-    {
-      onSuccess(data) {
-        toast.success(data?.message)
-        router.push('/login')
-        // router.push('/verify-email')
-      },
-    },
-  )
+  const [register, { isLoading }] = useRegisterMutation()
 
   const handleRegistration: SubmitHandler<RegisterInput> = (value) => {
-    mutate(value)
+    register(value)
   }
 
   useEffect(() => {
@@ -94,12 +82,12 @@ const RegisterForm = () => {
           {isLoading ? 'Loading...' : 'Sign Up'}
         </button>
         <label className="label flex justify-end">
-          <a
+          <Link
+            href="/login"
             className="label-text-alt link link-hover text-primary"
-            onClick={() => router.push('/login')}
           >
             Joined us before? <b>Sign in</b>
-          </a>
+          </Link>
         </label>
       </form>
     </FormProvider>

@@ -1,4 +1,4 @@
-import Providers from '@/react-query/providers'
+import Providers from '@/redux/providers'
 import './globals.css'
 import { Roboto } from 'next/font/google'
 
@@ -18,10 +18,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html suppressHydrationWarning lang="en">
       <body className={roboto.className}>
-          <Providers>{children} </Providers>
+          <Providers>{children}</Providers>
       </body>
     </html>
   )

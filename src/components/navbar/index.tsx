@@ -1,29 +1,29 @@
 'use client'
-import { logoutUserFn } from '@/api/authApi'
-import { useAuthContext } from '@/context/authContext'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { AiFillWechat, AiOutlineBell } from 'react-icons/ai'
-import { useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import SwitchTheme from '../SwitchTheme'
-import { AUTH_TYPE } from '@/constant/auth'
 import Link from 'next/link'
+import { useLogoutMutation } from '@/redux/auth/auth.service'
+import { useCookies } from 'react-cookie'
+import { useGetMeQuery } from '@/redux/user/user.service'
+import { useAppSelector } from '@/redux/hooks'
 
 const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
-  const router = useRouter()
-  const authContext = useAuthContext()
-  const user = authContext.state.user
-  const { mutate: logoutUser } = useMutation(async () => await logoutUserFn(), {
-    onSuccess: (data) => {
-      authContext.dispatch({ type: AUTH_TYPE.SET_USER, payload: null })
-      router.push('/')
-    },
+  const [cookies] = useCookies(['loggedIn'])
+  const { isLoading, isFetching } = useGetMeQuery(null, {
+    skip: !cookies.loggedIn,
   })
+  const user = useAppSelector((state) => state.user.user)
+  const loading = isLoading || isFetching
+  const [logout] = useLogoutMutation()
+  const router = useRouter()
 
   const onLogoutHandler = async () => {
-    logoutUser()
+    await logout().unwrap()
+    router.push('/')
   }
 
   return (
@@ -47,7 +47,23 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
             <AiFillWechat className="fill-primary w-8 h-8" />
           </Link>
         </label>
-        {!user ? (
+        {loading ? (
+          <div role="status" className="animate-pulse">
+            <svg
+              className="w-10 h-10 mr-2 text-gray-200 dark:text-gray-700"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </div>
+        ) : !user ? (
           <Link href="/login" className="btn btn-primary">
             Sign in
           </Link>
@@ -56,31 +72,47 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
             <div className="dropdown dropdown-end">
               <label tabIndex={0} className="btn btn-ghost btn-circle">
                 <div className="indicator mt-2">
-                  <AiOutlineBell className="h-8 w-8" />
+                  <AiOutlineBell className="h-8 w-8 fill-primary" />
                   <span className="badge badge-xs badge-primary indicator-item"></span>
                 </div>
               </label>
               <ul
                 tabIndex={0}
-                className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
+                className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-56"
               >
-                <li>
-                  <a>
+                 <li className='w-full'>
+                  <a className='w-full'>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sit, quaerat?
                   </a>
                 </li>
-                <li>
-                  <a>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sit, quaerat?
+                <li className='w-full'>
+                  <a className='w-full'>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing
                   </a>
                 </li>
-                <li>
-                  <a>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sit, quaerat?
+                <li className='w-full'>
+                  <a className='w-full'>
+                    Lorem ipsum
                   </a>
+                </li>
+                <li className='w-full'>
+                  <a className='w-full'>
+                    Lorem ipsum
+                  </a>
+                </li>
+                <li className='w-full'>
+                  <a className='w-full'>
+                    Lorem ipsum dolor sit amet, consectetur
+                  </a>
+                </li>
+                <li className='w-full'>
+                  <a className='w-full'>
+                    Lorem ipsum dolor sit amet
+                  </a>
+                </li>
+                <li className="self-end">
+                  <Link href="/notifications" className='text-primary'>View All</Link>
                 </li>
               </ul>
             </div>
@@ -102,10 +134,13 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
                 className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a>Profile</a>
+                  <Link href="/notifications">Notifications</Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link href="/profile">Profile</Link>
+                </li>
+                <li>
+                  <Link href="/settings">Settings</Link>
                 </li>
                 <li>
                   <a onClick={onLogoutHandler}>Logout</a>

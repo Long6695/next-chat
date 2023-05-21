@@ -1,17 +1,15 @@
 'use client'
-import { getMeFn, loginUserFn } from '@/api/authApi'
 import FormInput from '@/components/FormInput'
-import { AUTH_TYPE } from '@/constant/auth'
-import { useAuthContext } from '@/context/authContext'
+import { useLoginMutation } from '@/redux/auth/auth.service'
+import { useAppSelector } from '@/redux/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form'
 import { AiOutlineLogin } from 'react-icons/ai'
 import { MdOutlineAlternateEmail, MdLockOutline } from 'react-icons/md'
-import { toast } from 'react-toastify'
 import { object, string, TypeOf } from 'zod'
 
 const loginSchema = object({
@@ -35,33 +33,10 @@ const LoginForm = () => {
     handleSubmit,
     formState: { isSubmitSuccessful },
   } = methods
-  const authContext = useAuthContext()
-  const [cookies] = useCookies(['loggedIn'])
-
-  // API Get Current Logged-in user
-  const query = useQuery(['authUser'], getMeFn, {
-    enabled: !!cookies.loggedIn,
-    select: (data) => data.data.user,
-    retry: 1,
-    onSuccess: (data) => {
-      authContext.dispatch({ type: AUTH_TYPE.SET_USER, payload: data })
-    },
-  })
-
-  //  API Login Mutation
-  const { mutate: loginUser, isLoading } = useMutation(
-    (userData: LoginInput) => loginUserFn(userData),
-    {
-      onSuccess: () => {
-        query.refetch()
-        toast.success('You successfully logged in')
-        router.push('/')
-      },
-    },
-  )
-
-  const handleLogin: SubmitHandler<LoginInput> = (value) => {
-    loginUser(value)
+  const [login, { isLoading }] = useLoginMutation()
+  const handleLogin: SubmitHandler<LoginInput> = async (value) => {
+    await login(value).unwrap()
+    router.push('/')
   }
 
   useEffect(() => {
@@ -91,12 +66,12 @@ const LoginForm = () => {
           {isLoading ? 'Loading...' : 'Sign In'}
         </button>
         <label className="label flex justify-end">
-          <a
+          <Link
+            href="/register"
             className="label-text-alt link link-hover text-primary"
-            onClick={() => router.push('/register')}
           >
             New to Chat? <b>Register</b>
-          </a>
+          </Link>
         </label>
       </form>
     </FormProvider>

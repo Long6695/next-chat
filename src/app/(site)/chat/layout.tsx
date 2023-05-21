@@ -1,7 +1,8 @@
+'use client'
 import Drawer from '@/app/(site)/chat/components/drawer'
 import React from 'react'
 
-const ChatLayout = ({ children }: { children: React.ReactNode }) => {
+const ChatLayout = ({ children }: {children: React.ReactNode }) => {
   return (
     <Drawer>
       {children}

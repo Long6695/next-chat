@@ -32,12 +32,12 @@ function IsAuth<T>(Component: React.ComponentType<T>) {
       return <Loader />
     }
 
-    if(cookies.loggedIn && user)
-    return (
-      <>
-        <Component {...props!}/>
-      </>
-    )
+    if (cookies.loggedIn && user)
+      return (
+        <>
+          <Component {...props!} />
+        </>
+      )
   }
 }
 

@@ -80,39 +80,35 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
                 tabIndex={0}
                 className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-56"
               >
-                 <li className='w-full'>
-                  <a className='w-full'>
+                <li className="w-full">
+                  <a className="w-full">
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sit, quaerat?
                   </a>
                 </li>
-                <li className='w-full'>
-                  <a className='w-full'>
+                <li className="w-full">
+                  <a className="w-full">
                     Lorem ipsum dolor sit amet, consectetur adipisicing
                   </a>
                 </li>
-                <li className='w-full'>
-                  <a className='w-full'>
-                    Lorem ipsum
-                  </a>
+                <li className="w-full">
+                  <a className="w-full">Lorem ipsum</a>
                 </li>
-                <li className='w-full'>
-                  <a className='w-full'>
-                    Lorem ipsum
-                  </a>
+                <li className="w-full">
+                  <a className="w-full">Lorem ipsum</a>
                 </li>
-                <li className='w-full'>
-                  <a className='w-full'>
+                <li className="w-full">
+                  <a className="w-full">
                     Lorem ipsum dolor sit amet, consectetur
                   </a>
                 </li>
-                <li className='w-full'>
-                  <a className='w-full'>
-                    Lorem ipsum dolor sit amet
-                  </a>
+                <li className="w-full">
+                  <a className="w-full">Lorem ipsum dolor sit amet</a>
                 </li>
                 <li className="self-end">
-                  <Link href="/notifications" className='text-primary'>View All</Link>
+                  <Link href="/notifications" className="text-primary">
+                    View All
+                  </Link>
                 </li>
               </ul>
             </div>

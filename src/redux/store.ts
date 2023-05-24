@@ -4,6 +4,7 @@ import { authApi } from './auth/auth.service'
 import { setupListeners } from '@reduxjs/toolkit/dist/query'
 import user from './user/user.slice'
 import { userApi } from './user/user.service'
+import { rtkQueryErrorLogger } from './rtkQueryErrorLogger'
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +15,11 @@ export const store = configureStore({
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({}).concat([authApi.middleware, userApi.middleware]),
+    getDefaultMiddleware({}).concat([
+      authApi.middleware,
+      userApi.middleware,
+      rtkQueryErrorLogger,
+    ]),
 })
 
 setupListeners(store.dispatch)

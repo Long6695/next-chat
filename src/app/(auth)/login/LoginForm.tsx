@@ -1,7 +1,6 @@
 'use client'
 import FormInput from '@/components/FormInput'
 import { useLoginMutation } from '@/redux/auth/auth.service'
-import { useAppSelector } from '@/redux/hooks'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'

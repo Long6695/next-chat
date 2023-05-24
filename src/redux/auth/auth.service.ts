@@ -19,7 +19,7 @@ export const authApi = createApi({
         url: endpoints.login,
         method: 'POST',
         body,
-        credentials: 'include'
+        credentials: 'include',
       }),
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
@@ -37,19 +37,18 @@ export const authApi = createApi({
     }),
     logout: builder.mutation<void, void>({
       query: () => ({
-          url: endpoints.logout,
-          credentials: 'include',
+        url: endpoints.logout,
+        credentials: 'include',
       }),
-      async onQueryStarted(arg, {dispatch, queryFulfilled}) {
-          try {
-            await queryFulfilled
-            dispatch(logout())
-          } catch (error) {
-
-          }
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          dispatch(logout())
+        } catch (error) {}
       },
-    })
+    }),
   }),
 })
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
+  authApi

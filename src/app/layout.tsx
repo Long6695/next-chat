@@ -18,11 +18,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-
   return (
     <html suppressHydrationWarning lang="en">
       <body className={roboto.className}>
-          <Providers>{children}</Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

@@ -2,25 +2,23 @@
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { AiFillWechat, AiOutlineBell } from 'react-icons/ai'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import SwitchTheme from '../SwitchTheme'
 import Link from 'next/link'
 import { useLogoutMutation } from '@/redux/auth/auth.service'
-import { useCookies } from 'react-cookie'
-import { useGetMeQuery } from '@/redux/user/user.service'
 import { useAppSelector } from '@/redux/hooks'
+import cl from 'classnames'
 
-const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
-  const [cookies] = useCookies(['loggedIn'])
-  const { isLoading, isFetching } = useGetMeQuery(null, {
-    skip: !cookies.loggedIn,
-  })
+const Navbar = ({
+  isNotRenderMenuIcon = false,
+}: {
+  isNotRenderMenuIcon?: boolean
+}) => {
+  const pathname = usePathname()
   const user = useAppSelector((state) => state.user.user)
-  const loading = isLoading || isFetching
   const [logout] = useLogoutMutation()
   const router = useRouter()
-
   const onLogoutHandler = async () => {
     await logout().unwrap()
     router.push('/')
@@ -29,41 +27,28 @@ const Navbar = ({ isHomePage = false }: { isHomePage?: boolean }) => {
   return (
     <div className="w-full navbar px-4">
       <div className="navbar-start">
-        {!isHomePage && (
+        {!isNotRenderMenuIcon && (
           <label htmlFor="my-drawer-3">
             <RxHamburgerMenu className="w-6 h-6 lg:hidden" />
           </label>
         )}
-      </div>
-      <div className="navbar-center">
-        <Link href="/">
+         <Link href="/">
           <h2 className="text-primary font-bold text-3xl">Logo</h2>
         </Link>
       </div>
+      <div className="navbar-center">
+
+      </div>
       <div className="navbar-end">
         <SwitchTheme />
-        <label className="btn btn-ghost btn-circle">
+        <label className={cl("btn btn-ghost btn-circle", {
+          'bg-secondary-focus' : pathname === '/chat'
+        })}>
           <Link href="/chat">
             <AiFillWechat className="fill-primary w-8 h-8" />
           </Link>
         </label>
-        {loading ? (
-          <div role="status" className="animate-pulse">
-            <svg
-              className="w-10 h-10 mr-2 text-gray-200 dark:text-gray-700"
-              aria-hidden="true"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </div>
-        ) : !user ? (
+        {!user ? (
           <Link href="/login" className="btn btn-primary">
             Sign in
           </Link>

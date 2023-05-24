@@ -1,4 +1,3 @@
-'use client'
 import Drawer from '@/app/(site)/chat/components/drawer'
 import React from 'react'
 

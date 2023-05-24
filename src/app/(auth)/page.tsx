@@ -1,12 +1,8 @@
-import Navbar from '@/components/navbar'
 import React from 'react'
+import Home from '@/app/(auth)/components/home'
 
-const Home = () => {
-  return (
-    <div>
-      <Navbar isHomePage />
-    </div>
-  )
+const PublicPage = () => {
+  return <Home />
 }
 
-export default Home
+export default PublicPage

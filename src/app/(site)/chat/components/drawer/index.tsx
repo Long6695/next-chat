@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
-import Navbar from '@/components/navbar'
+import React from 'react'
 import SearchBar from '../search'
-
+import { BsList } from 'react-icons/bs'
 const Drawer = ({ children }: { children: React.ReactNode }) => {
   // const [selectedRoom, setSelectedRoom] = useState<RoomsType>()
   // const handleSelectedRoom = (room: RoomsType) => {
@@ -12,7 +11,7 @@ const Drawer = ({ children }: { children: React.ReactNode }) => {
     <div className="drawer drawer-mobile bg-base-300">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col">
-        <Navbar />
+        <BsList className="w-6 h-6 lg:hidden ml-4 fill-primary" />
         <div className="p-4 h-full">{children}</div>
       </div>
       <div className="drawer-side">

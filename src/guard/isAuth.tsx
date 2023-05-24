@@ -17,12 +17,12 @@ function IsAuth<T>(Component: React.ComponentType<T>) {
     } = useGetMeQuery(null, {
       skip: !cookies.loggedIn,
     })
-
     const loading = isLoading || isFetching
 
     useEffect(() => {
       if (!loading) {
         if (!cookies.loggedIn || !user) {
+          toast.warn('Please login for using this feature!')
           router.replace('/')
         }
       }
